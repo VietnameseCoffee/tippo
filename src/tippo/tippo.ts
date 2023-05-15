@@ -1,10 +1,12 @@
+import "./tippo.scss";
+
 import { throttle } from "lodash";
 
 type animation = "grow";
 type animationEntry = "pop-away";
 type color = "blue" | "green" | "purple" | "default";
 
-type state = "active" | "closed";
+type state = "active" | "hidden" | "closed";
 type arrowPos = 1 | 2 | 3;
 type targetPos = 1 | 2 | 3;
 type side = "above" | "below";
@@ -14,6 +16,7 @@ export type TippoOptions = {
 
   animation?: animation;
   animationEntry?: animationEntry;
+  buttonContent?: string;
   arrowPos?: arrowPos;
   color?: color;
   content: string;
@@ -21,7 +24,6 @@ export type TippoOptions = {
   targetPos?: targetPos;
 };
 class Tippo {
-  hi: number;
   #elements: HTMLElement;
   #id: string;
   #options: TippoOptions;
@@ -33,19 +35,22 @@ class Tippo {
   constructor(targetId: string, options: TippoOptions) {
     if (!options.tippoId) {
       console.error("TippoId is missing, tooltip not created");
-      return;
+      return null;
     }
-    this.hi = 4;
     this.#id = options.tippoId;
-    this.#targetId = targetId;
     this.#options = options;
+    this.#state = "hidden";
+    this.#targetId = targetId;
   }
   /**
-   * Creates the popover when possible
-   * runs an initial check to see if the popo
+   * Creates the popover elements and appends to the dom if possible
+   * Perform initial validations first if the instance can append
+   * Create the element then append with resize listeners/observers
+   *
    * @returns boolean
    */
-  addPopover(): boolean {
+  append(): boolean {
+    // checks
     if (this.#isTippoSeen()) return false;
     if (this.#state === "active") return false;
 
@@ -64,9 +69,6 @@ class Tippo {
       const nodeEl = this.#createToolTip(this.#options);
       body.appendChild(nodeEl);
 
-      // assign initial position of tooltip
-      this.#setPopoverPosition(nodeEl, target, this.#options);
-
       // create callback to reassign position
       this.#positionCallback = throttle(() => {
         this.#setPopoverPosition(nodeEl, target, this.#options);
@@ -81,10 +83,11 @@ class Tippo {
       // add close listener
       const closeButton = nodeEl.querySelector(".popover-close");
       closeButton.addEventListener("click", () => {
-        this.#closePopover();
+        this.#close();
       });
 
       this.#elements = nodeEl;
+      this.#state = "active";
     } catch (e) {
       console.error(`Could not add popover ${e}`);
       returnState = false;
@@ -93,23 +96,53 @@ class Tippo {
     return returnState;
   }
 
+  hide(): boolean {
+    let state = false;
+    if (this.#elements && this.#state !== "hidden") {
+      this.#state = "hidden";
+      this.#elements.remove();
+      state = true;
+    }
+
+    return state;
+  }
+
+  reset(): boolean {
+    localStorage.setItem(this.#id, "");
+    return true;
+  }
+
+  /**************************************************************
+   * PRIVATE
+   */
+
+  #close = () => {
+    if (this.#elements) {
+      this.#elements.remove();
+      this.#elements = null;
+      window.removeEventListener("resize", this.#positionCallback);
+      localStorage.setItem(this.#id, "true");
+    }
+  };
+
   #createToolTip({
     animation,
     animationEntry,
+    buttonContent = "Okay",
     arrowPos = 1,
     content = "",
     side = "above",
   }: TippoOptions) {
-    // create popover base
-    const popover = document.createElement("div");
-    popover.classList.add("tippo-popup");
-    popover.classList.add(`p-${side}`);
-    popover.classList.add(`p-${animationEntry}`);
-    // create main popover
-    const popoverInner = document.createElement("div");
-    popoverInner.classList.add("popover-main");
-    popoverInner.classList.add(`p-${animation}`);
-    popover.appendChild(popoverInner);
+    // create tooltip container
+    const tooltip = document.createElement("div");
+    tooltip.classList.add("tippo-popup");
+    tooltip.classList.add(`p-${side}`);
+    if (animationEntry) tooltip.classList.add(`p-${animationEntry}`);
+    // create main tooltip
+    const tooltipInner = document.createElement("div");
+    tooltipInner.classList.add("popover-main");
+    if (animation) tooltipInner.classList.add(`p-${animation}`);
+    tooltip.appendChild(tooltipInner);
     // create content element
     const contentDiv = document.createElement("div");
     contentDiv.classList.add("popover-content");
@@ -117,82 +150,19 @@ class Tippo {
     // create closing element
     const closeButton = document.createElement("button");
     closeButton.classList.add("popover-close");
-    closeButton.innerText = "Got It";
+    closeButton.innerText = buttonContent;
     // append elements
-    popoverInner.appendChild(contentDiv);
-    popoverInner.appendChild(closeButton);
+    tooltipInner.appendChild(contentDiv);
+    tooltipInner.appendChild(closeButton);
 
     // set arrow side
     const arrow = document.createElement("div");
     arrow.classList.add("popover-arrow");
     this.#setArrowSide(arrow, side);
     this.#setArrowPos(arrow, arrowPos);
-    popoverInner.appendChild(arrow);
+    tooltipInner.appendChild(arrow);
 
-    return popover;
-  }
-
-  /**
-   * Utilities
-   */
-
-  #closePopover = (): boolean => {
-    if (this.#elements) {
-      this.#elements.remove();
-      this.#elements = null;
-      window.removeEventListener("resize", this.#positionCallback);
-      localStorage.setItem(this.#id, "true");
-    }
-
-    return true;
-  };
-
-  #setArrowPos(el: HTMLElement, pos: arrowPos) {
-    let alignClass;
-    switch (pos) {
-      case 1:
-        alignClass = "p-arr-left";
-        break;
-      case 2:
-        alignClass = "p-arr-center";
-        break;
-      case 3:
-        alignClass = "p-arr-right";
-        break;
-      default:
-        console.warn("default arrow position is chosen");
-        break;
-    }
-    el.classList.add(alignClass);
-    return el;
-  }
-
-  #setArrowSide(el: HTMLElement, side: side) {
-    let sideClass;
-    switch (side) {
-      case "above":
-        sideClass = "p-arr-bot";
-        break;
-      case "below":
-        sideClass = "p-arr-top";
-        break;
-      default:
-        sideClass = "p-arr-top";
-        console.warn("default side is chosen");
-        break;
-    }
-    el.classList.add(sideClass);
-    return el;
-  }
-
-  #isTippoSeen(): boolean {
-    const value = localStorage.getItem(this.#id);
-    return value === "true";
-  }
-
-  resetPopover(): boolean {
-    localStorage.setItem(this.#id, "");
-    return true;
+    return tooltip;
   }
 
   #setPopoverPosition(
@@ -235,6 +205,53 @@ class Tippo {
 
     popover.style.top = `${top}px`;
     popover.style.left = `${left}px`;
+  }
+
+  /**
+   * Utilities
+   */
+
+  #isTippoSeen(): boolean {
+    const value = localStorage.getItem(this.#id);
+    return value === "true";
+  }
+
+  #setArrowPos(el: HTMLElement, pos: arrowPos) {
+    let alignClass;
+    switch (pos) {
+      case 1:
+        alignClass = "p-arr-left";
+        break;
+      case 2:
+        alignClass = "p-arr-center";
+        break;
+      case 3:
+        alignClass = "p-arr-right";
+        break;
+      default:
+        console.warn("default arrow position is chosen");
+        break;
+    }
+    el.classList.add(alignClass);
+    return el;
+  }
+
+  #setArrowSide(el: HTMLElement, side: side) {
+    let sideClass;
+    switch (side) {
+      case "above":
+        sideClass = "p-arr-bot";
+        break;
+      case "below":
+        sideClass = "p-arr-top";
+        break;
+      default:
+        sideClass = "p-arr-top";
+        console.warn("default side is chosen");
+        break;
+    }
+    el.classList.add(sideClass);
+    return el;
   }
 }
 
