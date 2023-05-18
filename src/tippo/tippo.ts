@@ -3,8 +3,8 @@ import "./tippo.scss";
 import { throttle } from "lodash";
 
 type animation = "grow";
-type animationEntry = "fade" | "pop-away";
-type color = "blue" | "green" | "purple" | "default";
+type animationEntry = "fade-in" | "pop-away";
+type color = "blue" | "gray" | "green" | "purple" | "default";
 
 type state = "active" | "hidden" | "closed";
 type arrowPos = 1 | 2 | 3;
@@ -23,6 +23,9 @@ export type TippoOptions = {
   side?: side;
   targetPos?: targetPos;
 };
+
+const THEME_COLORS = ["blue", "gray", "green", "purple", "default"];
+
 class Tippo {
   #elements: HTMLElement;
   #id: string;
@@ -145,6 +148,7 @@ class Tippo {
     animationEntry,
     buttonContent = "Okay",
     arrowPos = 1,
+    color = "default",
     content = "",
     side = "above",
   }: TippoOptions) {
@@ -179,6 +183,13 @@ class Tippo {
     this.#setArrowSide(arrow, side);
     this.#setArrowPos(arrow, arrowPos);
     tooltipInner.appendChild(arrow);
+
+    // set color themes
+    const themeSet = new Set(THEME_COLORS);
+    const chosenColor = themeSet.has(color) ? color : "default";
+    arrow.classList.add(`p-theme-body-${chosenColor}`);
+    tooltipInner.classList.add(`p-theme-body-${chosenColor}`);
+    closeButton.classList.add(`p-theme-button-${chosenColor}`);
 
     return tooltip;
   }
