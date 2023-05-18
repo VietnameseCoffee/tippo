@@ -1,6 +1,8 @@
 import "./styles/index.scss";
 
 import type { TippoOptions } from "./tippo/tippo";
+
+import { TIPS } from "./constants";
 import Tippo from "./tippo/tippo";
 
 const POPOVER_IDS = {
@@ -15,34 +17,16 @@ const POPOVER_IDS = {
   },
 };
 
-const MODAL_CLOSE: TippoOptions = {
-  tippoId: "tippo_0",
-  content: "This is a test tip.",
-  arrowPos: 1,
-  side: "below",
-  targetPos: 2,
-  animation: "grow",
-  animationEntry: "pop-away",
-};
+const items = TIPS.map((t, i) => ({ id: `btn-${i}`, options: t }));
 
-const PHOTO_GALLERY: TippoOptions = {
-  tippoId: "tippo_1",
-  content: "Click on a photo below to see in full detail",
-  arrowPos: 1,
-  side: "above",
-  targetPos: 3,
-  animation: "grow",
-  animationEntry: "pop-away",
-  buttonContent: "Got it",
-};
-
-var tip0 = new Tippo("id-1", MODAL_CLOSE);
-tip0.append();
-console.log(tip0);
-
-var tip1 = new Tippo("btn-3", PHOTO_GALLERY);
-tip1.append();
-console.log(tip1);
-
-// tip0.resetPopover();
-// tip1.resetPopover();
+items.forEach(({ id, options }) => {
+  const button = document.getElementById(id);
+  const tip = new Tippo(id, options);
+  button.addEventListener("click", () => {
+    if (tip.isOpen()) {
+      tip.hide();
+    } else {
+      tip.append();
+    }
+  });
+});

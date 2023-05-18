@@ -3,7 +3,7 @@ import "./tippo.scss";
 import { throttle } from "lodash";
 
 type animation = "grow";
-type animationEntry = "pop-away";
+type animationEntry = "fade" | "pop-away";
 type color = "blue" | "green" | "purple" | "default";
 
 type state = "active" | "hidden" | "closed";
@@ -72,12 +72,16 @@ class Tippo {
       // create callback to reassign position
       this.#positionCallback = throttle(() => {
         this.#setPopoverPosition(nodeEl, target, this.#options);
-      }, 160);
+      }, 180);
 
       // observers to update popover position
       // add observer and listeners
       this.#observer = new MutationObserver(this.#positionCallback);
-      this.#observer.observe(document, { attributes: true, subtree: true });
+      this.#observer.observe(document, {
+        attributes: true,
+        childList: true,
+        subtree: true,
+      });
       window.addEventListener("resize", this.#positionCallback);
 
       // add close listener
@@ -88,6 +92,7 @@ class Tippo {
 
       this.#elements = nodeEl;
       this.#state = "active";
+      this.#positionCallback();
     } catch (e) {
       console.error(`Could not add popover ${e}`);
       returnState = false;
@@ -101,10 +106,15 @@ class Tippo {
     if (this.#elements && this.#state !== "hidden") {
       this.#state = "hidden";
       this.#elements.remove();
+      this.#deactiveListeners();
       state = true;
     }
 
     return state;
+  }
+
+  isOpen(): boolean {
+    return this.#state === "active";
   }
 
   reset(): boolean {
@@ -116,11 +126,16 @@ class Tippo {
    * PRIVATE
    */
 
+  #deactiveListeners() {
+    window.removeEventListener("resize", this.#positionCallback);
+    this.#observer.disconnect();
+  }
+
   #close = () => {
     if (this.#elements) {
       this.#elements.remove();
       this.#elements = null;
-      window.removeEventListener("resize", this.#positionCallback);
+      this.#deactiveListeners();
       localStorage.setItem(this.#id, "true");
     }
   };
@@ -137,6 +152,9 @@ class Tippo {
     const tooltip = document.createElement("div");
     tooltip.classList.add("tippo-popup");
     tooltip.classList.add(`p-${side}`);
+    // initialize starting top and left
+    tooltip.style.top = "0";
+    tooltip.style.left = "0";
     if (animationEntry) tooltip.classList.add(`p-${animationEntry}`);
     // create main tooltip
     const tooltipInner = document.createElement("div");

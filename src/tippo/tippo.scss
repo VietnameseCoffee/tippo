@@ -52,12 +52,19 @@
   .p-arr-top {
     border-top: 2px solid var(--border-purple-1);
     border-left: 2px solid var(--border-purple-1);
-    top: -10px;
+    top: -9px;
   }
 
   .p-arr-bot {
     border-bottom: 2px solid var(--border-purple-1);
     border-right: 2px solid var(--border-purple-1);
+    bottom: -9px;
+  }
+
+  .p-grow .p-arr-top {
+    top: -10px;
+  }
+  .p-grow .p-arr-bot {
     bottom: -10px;
   }
 
