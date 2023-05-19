@@ -7,7 +7,6 @@ type animationEntry = "fade-in" | "pop-away";
 type color = "blue" | "gray" | "green" | "purple" | "default";
 
 type state = "active" | "hidden" | "closed";
-type arrowPos = 1 | 2 | 3;
 type targetPos = 1 | 2 | 3;
 type side = "above" | "below";
 
@@ -17,7 +16,6 @@ export type TippoOptions = {
   animation?: animation;
   animationEntry?: animationEntry;
   buttonContent?: string;
-  arrowPos?: arrowPos;
   color?: color;
   content: string;
   side?: side;
@@ -25,6 +23,7 @@ export type TippoOptions = {
 };
 
 const THEME_COLORS = ["blue", "gray", "green", "purple", "default"];
+const BUFFER = 12;
 
 class Tippo {
   #elements: HTMLElement;
@@ -139,6 +138,7 @@ class Tippo {
       this.#elements.remove();
       this.#elements = null;
       this.#deactiveListeners();
+      this.#state = "hidden";
       localStorage.setItem(this.#id, "true");
     }
   };
@@ -147,10 +147,10 @@ class Tippo {
     animation,
     animationEntry,
     buttonContent = "Okay",
-    arrowPos = 1,
     color = "default",
     content = "",
     side = "above",
+    targetPos = 2,
   }: TippoOptions) {
     // create tooltip container
     const tooltip = document.createElement("div");
@@ -181,7 +181,8 @@ class Tippo {
     const arrow = document.createElement("div");
     arrow.classList.add("popover-arrow");
     this.#setArrowSide(arrow, side);
-    this.#setArrowPos(arrow, arrowPos);
+    console.log(targetPos);
+    this.#setArrowPos(arrow, targetPos);
     tooltipInner.appendChild(arrow);
 
     // set color themes
@@ -213,19 +214,17 @@ class Tippo {
     }
     // assign popover relative to target
     if (targetPos === 1) {
-      left = bounds.left;
-    } else if (targetPos === 3) {
-      left = bounds.left + bounds.width / 2;
-    } else {
+      left = bounds.left - popover.clientWidth / 2;
+    } else if (targetPos === 2) {
       left = bounds.left + bounds.width - popover.clientWidth;
+    } else {
+      left = bounds.left + bounds.width / 2;
     }
 
     // adjust boundary if popover is out of window
-    if (left + popover.clientWidth > window.innerWidth) {
-      let clientAdjust = bounds.right - popover.clientWidth;
-      let windowAdjust = window.innerWidth - (popover.clientWidth + 40);
-
-      left = clientAdjust < windowAdjust ? clientAdjust : windowAdjust;
+    if (left + popover.clientWidth + BUFFER > window.innerWidth) {
+      let windowAdjust = window.innerWidth - (popover.clientWidth + BUFFER);
+      left = windowAdjust;
     }
 
     if (left < 0) {
@@ -245,17 +244,17 @@ class Tippo {
     return value === "true";
   }
 
-  #setArrowPos(el: HTMLElement, pos: arrowPos) {
+  #setArrowPos(el: HTMLElement, pos: targetPos) {
     let alignClass;
     switch (pos) {
       case 1:
-        alignClass = "p-arr-left";
+        alignClass = "p-arr-right";
         break;
       case 2:
         alignClass = "p-arr-center";
         break;
       case 3:
-        alignClass = "p-arr-right";
+        alignClass = "p-arr-left";
         break;
       default:
         console.warn("default arrow position is chosen");
