@@ -1,21 +1,7 @@
 import "./styles/index.scss";
 
-import type { TippoOptions } from "./tippo/tippo";
-
 import { TIPS } from "./constants";
 import Tippo from "./tippo/tippo";
-
-const POPOVER_IDS = {
-  PHOTO_GALLERY: {
-    tippoId: "POPOVER_GALLERY",
-    content: "Click on a photo below to see in full detail",
-    arrowPos: "1",
-    side: "above",
-    targetPos: "2",
-    animation: "grow",
-    animationEntry: "pop-away",
-  },
-};
 
 const items = TIPS.map((t, i) => ({ id: `btn-${i}`, options: t }));
 
@@ -26,7 +12,14 @@ items.forEach(({ id, options }) => {
     if (tip.isOpen()) {
       tip.hide();
     } else {
+      tip.reset();
       tip.append();
     }
   });
 });
+
+const buttons = document.querySelectorAll("button");
+
+for (const button of buttons) {
+  button.click();
+}
