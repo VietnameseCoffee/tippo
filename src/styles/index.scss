@@ -3,15 +3,20 @@ html {
 }
 
 body {
+  font-family: Arial, Helvetica, sans-serif;
   height: 100%;
   margin: 0;
 }
 
 #demo {
   margin: 0 auto;
-  max-width: 1200px;
-  width: 80%;
   height: 100%;
+}
+
+#examples {
+  padding-top: 5rem;
+  border-top: 32px solid #d2d7dd;
+  background-color: #f3f3f3;
 }
 
 #look {
@@ -24,10 +29,6 @@ h1 {
   padding: 2rem;
   margin: 0 auto;
   width: 10rem;
-}
-
-.test {
-  border: 1px solid blue;
 }
 
 .intro {
@@ -53,12 +54,23 @@ h1 {
 
 .btn-container {
   flex-direction: column;
-  background-color: #cccccc;
+  background-color: #dedede;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  button {
+    border: 2px solid #b4c0ca;
+    border-radius: 2px;
+  }
+  button:hover {
+    background-color: #d6e2ed;
+  }
+  button:active {
+    background-color: #d2d9df;
+  }
 }
 
 .btn-container p {
@@ -70,10 +82,12 @@ h1 {
 }
 
 .btn-grid {
-  margin-top: 8rem;
+  max-width: 1200px;
+  width: 80%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(4, 10rem);
   grid-gap: 2rem;
-  padding: 1rem;
+  padding: 0 1rem;
+  margin: 0 auto;
 }

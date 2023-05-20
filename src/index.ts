@@ -9,7 +9,7 @@ items.forEach(({ id, options }) => {
   const button = document.getElementById(id);
   const reset = document.getElementById(`${id}-reset`);
   const tip = new Tippo(id, options);
-  button.addEventListener("click", () => {
+  button?.addEventListener("click", () => {
     if (tip.isOpen()) {
       tip.remove();
     } else {
@@ -24,8 +24,8 @@ items.forEach(({ id, options }) => {
   }
 });
 
-const tip = new Tippo("look", {
-  tippoId: "tippo_4",
+const tip1 = new Tippo("look", {
+  tippoId: "intro-1",
   content: "Hi I'm Tippo the tool tip!",
   color: "purple",
   side: "above",
@@ -35,9 +35,10 @@ const tip = new Tippo("look", {
   animationEntry: "pop-away",
   buttonContent: "Hello",
 });
-tip.append();
+tip1.append();
+
 const tip2 = new Tippo("look", {
-  tippoId: "tippo_4",
+  tippoId: "intro-2",
   content: "Check out the Demo below!",
   color: "purple",
   side: "below",

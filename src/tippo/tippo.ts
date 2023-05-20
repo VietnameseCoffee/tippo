@@ -27,7 +27,7 @@ const THEME_COLORS = ["blue", "gray", "green", "purple", "default"];
 const BUFFER = 12;
 
 class Tippo {
-  #elements: HTMLElement;
+  #elements: HTMLElement | null;
   #id: string;
   #noPersist: boolean;
   #options: TippoOptions;
@@ -38,8 +38,7 @@ class Tippo {
 
   constructor(targetId: string, options: TippoOptions) {
     if (!options.tippoId) {
-      console.error("TippoId is missing, tooltip not created");
-      return null;
+      throw new Error("TippoId is missing, tooltip not created");
     }
     this.#id = options.tippoId;
     this.#noPersist = options.noPersist === true ? true : false;
@@ -69,6 +68,11 @@ class Tippo {
       return false;
     }
 
+    if (!body) {
+      console.error(`There is no body element to attach to`);
+      return false;
+    }
+
     let returnState = true;
     try {
       const nodeEl = this.#createToolTip(this.#options);
@@ -91,7 +95,7 @@ class Tippo {
 
       // add close listener
       const closeButton = nodeEl.querySelector(".popover-close");
-      closeButton.addEventListener("click", () => {
+      closeButton?.addEventListener("click", () => {
         this.#close();
       });
 
@@ -240,7 +244,7 @@ class Tippo {
    */
 
   #removeNodesFromDom() {
-    this.#elements.remove();
+    this.#elements?.remove();
     this.#elements = null;
     this.#deactiveListeners();
   }

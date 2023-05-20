@@ -1,24 +1,26 @@
 :root {
   --background-default-1: #ebeba9;
-  --background-default-2: #bfbf61;
+  --background-default-2: #b5b55e;
   --border-default-1: #73734a;
-  --border-default-2: #a3a345;
+  --border-default-2: #999942;
   --background-blue-1: #8fb3ea;
-  --background-blue-2: #5c92e6;
+  --background-blue-2: #5788d6;
   --border-blue-1: #2361be;
-  --border-blue-2: #3976d5;
+  --border-blue-2: #3c6ab1;
   --background-gray-1: #dfdfdf;
-  --background-gray-2: #9f9f9f;
+  --background-gray-2: #979797;
   --border-gray-1: #5d5d5d;
   --border-gray-2: #7d7b7b;
   --background-green-1: #9cd795;
-  --background-green-2: #53ad46;
+  --background-green-2: #52a946;
   --border-green-1: #308425;
-  --border-green-2: #37982b;
+  --border-green-2: #368a2b;
   --background-purple-1: #b89fe9;
   --background-purple-2: #9171d1;
   --border-purple-1: #5e35b1;
-  --border-purple-2: #7961b1;
+  --border-purple-2: #68539a;
+  --font-button: #fefefe;
+  --font-main: #222222;
 }
 
 .tippo-popup {
@@ -26,7 +28,7 @@
 
   .popover-main {
     border-radius: 3px;
-    color: black;
+    color: var(--font-main);
     font-style: normal;
     font-family: Arial, Helvetica, sans-serif;
     padding: 0.75rem;
@@ -41,7 +43,7 @@
     border-radius: 4px;
     background-color: var(--background-purple-2);
     border: 2px solid var(--border-purple-2);
-    color: white;
+    color: var(--font-button);
     cursor: pointer;
     display: block;
     margin: 1.5rem auto 0rem;

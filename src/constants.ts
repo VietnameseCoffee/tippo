@@ -30,7 +30,7 @@ export const TIPS: Array<TippoOptions> = [
   },
   {
     tippoId: "tippo_3",
-    content: "I reposition myself on screen resizes and dom updates",
+    content: "Tippo auto adjusts on screen resizes and dom updates",
     buttonContent: "Neat",
     color: "green",
     noPersist: true,
@@ -52,8 +52,8 @@ export const TIPS: Array<TippoOptions> = [
   {
     tippoId: "tippo_5",
     content:
-      "My view state can persist leveraging LocalStorage, \n\n Close me using the tool tip button and refresh the page!",
-    buttonContent: "Click Me!",
+      'View state can persist leveraging LocalStorage, \n\n Close me using the tool tip button and click the "show/hide" buttons again!',
+    buttonContent: "Try it!",
     side: "above",
     targetPos: 3,
     animation: "grow",
