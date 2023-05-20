@@ -188,7 +188,6 @@ class Tippo {
     const arrow = document.createElement("div");
     arrow.classList.add("popover-arrow");
     this.#setArrowSide(arrow, side);
-    console.log(targetPos);
     this.#setArrowPos(arrow, targetPos);
     tooltipInner.appendChild(arrow);
 
