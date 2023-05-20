@@ -152,7 +152,7 @@
 }
 
 /*********************************
-* ANIMATIONS
+* ANIMATIONS -- ENTRY
 */
 
 .p-fade-in {
@@ -211,6 +211,34 @@
     transform: translateY(0);
   }
 }
+
+.p-surprise {
+  animation: p-surprise 1s;
+  animation-iteration-count: 1;
+}
+
+@keyframes p-surprise {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  10% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/*********************************
+* ANIMATIONS -- PERSISTENT
+*/
 
 .p-grow {
   animation: grow infinite 3s ease-in-out;

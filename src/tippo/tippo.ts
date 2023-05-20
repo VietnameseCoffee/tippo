@@ -3,7 +3,7 @@ import "./tippo.scss";
 import { throttle } from "lodash";
 
 type animation = "grow";
-type animationEntry = "fade-in" | "pop-away";
+type animationEntry = "fade-in" | "pop-away" | "surprise";
 type color = "blue" | "gray" | "green" | "purple" | "default";
 
 type state = "active" | "hidden";
@@ -18,9 +18,9 @@ export type TippoOptions = {
   buttonContent?: string;
   color?: color;
   content: string;
+  noPersist?: boolean;
   side?: side;
   targetPos?: targetPos;
-  noPersist?: boolean;
 };
 
 const THEME_COLORS = ["blue", "gray", "green", "purple", "default"];

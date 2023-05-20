@@ -36,7 +36,7 @@ export const TIPS: Array<TippoOptions> = [
     noPersist: true,
     side: "above",
     targetPos: 2,
-    animationEntry: "fade-in",
+    animationEntry: "surprise",
   },
   {
     tippoId: "tippo_4",
@@ -52,8 +52,8 @@ export const TIPS: Array<TippoOptions> = [
   {
     tippoId: "tippo_5",
     content:
-      "My view state can persist leveraging LocalStorage, \n\n Close me using the tool tip button and refresh the page! \n Note: Default persists",
-    buttonContent: "Try it out!",
+      "My view state can persist leveraging LocalStorage, \n\n Close me using the tool tip button and refresh the page!",
+    buttonContent: "Click Me!",
     side: "above",
     targetPos: 3,
     animation: "grow",

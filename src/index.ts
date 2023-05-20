@@ -33,7 +33,7 @@ const tip = new Tippo("look", {
   targetPos: 3,
   animation: "grow",
   animationEntry: "pop-away",
-  buttonContent: "Got it",
+  buttonContent: "Hello",
 });
 tip.append();
 const tip2 = new Tippo("look", {
@@ -45,6 +45,6 @@ const tip2 = new Tippo("look", {
   targetPos: 1,
   animation: "grow",
   animationEntry: "pop-away",
-  buttonContent: "Close Me",
+  buttonContent: "Click to Close",
 });
 tip2.append();
