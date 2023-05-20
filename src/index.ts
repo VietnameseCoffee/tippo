@@ -24,9 +24,9 @@ items.forEach(({ id, options }) => {
   }
 });
 
-const introTip1 = new Tippo("look", {
-  tippoId: "intro-1",
-  content: "Hi I'm Tippo the tool tip!",
+const introTip = new Tippo("chat-box-target", {
+  tippoId: "init-1",
+  content: "Hi I'm Tippo the tool tip! Check out the Demo below",
   color: "purple",
   side: "above",
   noPersist: true,
@@ -36,19 +36,20 @@ const introTip1 = new Tippo("look", {
   buttonContent: "Hello",
 });
 
-const introTip2 = new Tippo("look", {
-  tippoId: "intro-2",
-  content: "Check out the Demo below!",
+const resetTip = new Tippo("btn-5-reset", {
+  tippoId: "init-2",
+  content:
+    "This button resets the local state for the tool tip on the left so it can render upon clicking again",
   color: "purple",
   side: "below",
   noPersist: true,
-  targetPos: 1,
+  targetPos: 3,
   animation: "grow",
   animationEntry: "pop-away",
   buttonContent: "Click to Close",
 });
 
 setTimeout(() => {
-  introTip1.append();
-  introTip2.append();
+  introTip.append();
+  resetTip.append();
 }, 360);

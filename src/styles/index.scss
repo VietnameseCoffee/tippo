@@ -8,6 +8,16 @@ body {
   margin: 0;
 }
 
+h2 {
+  width: 5rem;
+  margin: 0 auto;
+}
+
+.demo-header {
+  background-color: #d2d7dd;
+  padding: 0.75rem;
+}
+
 #demo {
   margin: 0 auto;
   height: 100%;
@@ -15,13 +25,21 @@ body {
 
 #examples {
   padding-top: 5rem;
-  border-top: 32px solid #d2d7dd;
   background-color: #f3f3f3;
 }
 
-#look {
-  width: 12rem;
-  margin: 8rem auto 10rem;
+#tippo-the-hippo {
+  width: 300px;
+  margin: 10rem auto 4rem;
+  background-image: url("../static/tippo_the_hippo.png");
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#chat-box-target {
+  width: 200px;
+  height: 0;
 }
 
 h1 {
