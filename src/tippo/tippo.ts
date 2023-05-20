@@ -6,7 +6,7 @@ type animation = "grow";
 type animationEntry = "fade-in" | "pop-away";
 type color = "blue" | "gray" | "green" | "purple" | "default";
 
-type state = "active" | "hidden" | "closed";
+type state = "active" | "hidden";
 type targetPos = 1 | 2 | 3;
 type side = "above" | "below";
 
@@ -20,6 +20,7 @@ export type TippoOptions = {
   content: string;
   side?: side;
   targetPos?: targetPos;
+  noPersist?: boolean;
 };
 
 const THEME_COLORS = ["blue", "gray", "green", "purple", "default"];
@@ -28,6 +29,7 @@ const BUFFER = 12;
 class Tippo {
   #elements: HTMLElement;
   #id: string;
+  #noPersist: boolean;
   #options: TippoOptions;
   #observer: MutationObserver;
   #state: state;
@@ -40,6 +42,7 @@ class Tippo {
       return null;
     }
     this.#id = options.tippoId;
+    this.#noPersist = options.noPersist === true ? true : false;
     this.#options = options;
     this.#state = "hidden";
     this.#targetId = targetId;
@@ -52,7 +55,7 @@ class Tippo {
    * @returns boolean
    */
   append(): boolean {
-    // checks
+    // checks if tippo is seen based on persist options
     if (this.#isTippoSeen()) return false;
     if (this.#state === "active") return false;
 
@@ -93,7 +96,7 @@ class Tippo {
       });
 
       this.#elements = nodeEl;
-      this.#state = "active";
+      this.#updateViewState("active");
       this.#positionCallback();
     } catch (e) {
       console.error(`Could not add popover ${e}`);
@@ -103,12 +106,11 @@ class Tippo {
     return returnState;
   }
 
-  hide(): boolean {
+  remove(): boolean {
     let state = false;
     if (this.#elements && this.#state !== "hidden") {
-      this.#state = "hidden";
-      this.#elements.remove();
-      this.#deactiveListeners();
+      this.#removeNodesFromDom();
+      this.#updateViewState("hidden");
       state = true;
     }
 
@@ -135,11 +137,9 @@ class Tippo {
 
   #close = () => {
     if (this.#elements) {
-      this.#elements.remove();
-      this.#elements = null;
-      this.#deactiveListeners();
-      this.#state = "hidden";
-      localStorage.setItem(this.#id, "true");
+      this.#removeNodesFromDom();
+      this.#updateViewState("hidden");
+      this.#updateStoredViewState();
     }
   };
 
@@ -239,7 +239,28 @@ class Tippo {
    * Utilities
    */
 
+  #removeNodesFromDom() {
+    this.#elements.remove();
+    this.#elements = null;
+    this.#deactiveListeners();
+  }
+
+  #updateViewState(state: state): state {
+    return (this.#state = state);
+  }
+  /**
+   * Updates the instance's view status based on its id if the
+   * instance is configured to persist
+   * @returns booleean, depending on the instance's noPersist
+   */
+  #updateStoredViewState(): boolean {
+    if (this.#noPersist) return false;
+    localStorage.setItem(this.#id, "true");
+    return true;
+  }
+
   #isTippoSeen(): boolean {
+    if (this.#noPersist) return false;
     const value = localStorage.getItem(this.#id);
     return value === "true";
   }
