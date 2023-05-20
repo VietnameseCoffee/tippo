@@ -2,7 +2,7 @@ import "./tippo.scss";
 
 import { throttle } from "lodash";
 
-type animation = "grow";
+type animation = "grow" | "shake";
 type animationEntry = "fade-in" | "pop-away" | "surprise";
 type color = "blue" | "gray" | "green" | "purple" | "default";
 
@@ -159,15 +159,18 @@ class Tippo {
     // create tooltip container
     const tooltip = document.createElement("div");
     tooltip.classList.add("tippo-popup");
-    tooltip.classList.add(`p-${side}`);
+    tooltip.classList.add(`tippo-${side}`);
     // initialize starting top and left
     tooltip.style.top = "0";
     tooltip.style.left = "0";
-    if (animationEntry) tooltip.classList.add(`p-${animationEntry}`);
+    if (animationEntry) tooltip.classList.add(`tippo-${animationEntry}`);
     // create main tooltip
     const tooltipInner = document.createElement("div");
     tooltipInner.classList.add("popover-main");
-    if (animation) tooltipInner.classList.add(`p-${animation}`);
+    if (animation) {
+      tooltipInner.classList.add("tippo-animate");
+      tooltipInner.classList.add(`tippo-${animation}`);
+    }
     tooltip.appendChild(tooltipInner);
     // create content element
     const contentDiv = document.createElement("div");
@@ -192,9 +195,9 @@ class Tippo {
     // set color themes
     const themeSet = new Set(THEME_COLORS);
     const chosenColor = themeSet.has(color) ? color : "default";
-    arrow.classList.add(`p-theme-body-${chosenColor}`);
-    tooltipInner.classList.add(`p-theme-body-${chosenColor}`);
-    closeButton.classList.add(`p-theme-button-${chosenColor}`);
+    arrow.classList.add(`tippo-theme-body-${chosenColor}`);
+    tooltipInner.classList.add(`tippo-theme-body-${chosenColor}`);
+    closeButton.classList.add(`tippo-theme-button-${chosenColor}`);
 
     return tooltip;
   }
@@ -273,13 +276,13 @@ class Tippo {
     let alignClass;
     switch (pos) {
       case 1:
-        alignClass = "p-arr-right";
+        alignClass = "tippo-arr-right";
         break;
       case 2:
-        alignClass = "p-arr-center";
+        alignClass = "tippo-arr-center";
         break;
       case 3:
-        alignClass = "p-arr-left";
+        alignClass = "tippo-arr-left";
         break;
       default:
         console.warn("default arrow position is chosen");
@@ -293,13 +296,13 @@ class Tippo {
     let sideClass;
     switch (side) {
       case "above":
-        sideClass = "p-arr-bot";
+        sideClass = "tippo-arr-bot";
         break;
       case "below":
-        sideClass = "p-arr-top";
+        sideClass = "tippo-arr-top";
         break;
       default:
-        sideClass = "p-arr-top";
+        sideClass = "tippo-arr-top";
         console.warn("default side is chosen");
         break;
     }

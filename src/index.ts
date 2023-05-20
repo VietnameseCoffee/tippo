@@ -24,7 +24,7 @@ items.forEach(({ id, options }) => {
   }
 });
 
-const tip1 = new Tippo("look", {
+const introTip1 = new Tippo("look", {
   tippoId: "intro-1",
   content: "Hi I'm Tippo the tool tip!",
   color: "purple",
@@ -35,9 +35,8 @@ const tip1 = new Tippo("look", {
   animationEntry: "pop-away",
   buttonContent: "Hello",
 });
-tip1.append();
 
-const tip2 = new Tippo("look", {
+const introTip2 = new Tippo("look", {
   tippoId: "intro-2",
   content: "Check out the Demo below!",
   color: "purple",
@@ -48,4 +47,8 @@ const tip2 = new Tippo("look", {
   animationEntry: "pop-away",
   buttonContent: "Click to Close",
 });
-tip2.append();
+
+setTimeout(() => {
+  introTip1.append();
+  introTip2.append();
+}, 360);

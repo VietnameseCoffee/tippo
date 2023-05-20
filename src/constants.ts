@@ -3,7 +3,8 @@ import type { TippoOptions } from "./tippo/tippo";
 export const TIPS: Array<TippoOptions> = [
   {
     tippoId: "tippo_0",
-    content: "You can adjust tool tip positions relative to the target",
+    content:
+      "You can adjust tool tip in 6 different positions relative to the target \n\nabove/below \n left/center/right",
     buttonContent: "Nice",
     color: "default",
     noPersist: true,
@@ -52,11 +53,11 @@ export const TIPS: Array<TippoOptions> = [
   {
     tippoId: "tippo_5",
     content:
-      'View state can persist leveraging LocalStorage, \n\n Close me using the tool tip button and click the "show/hide" buttons again!',
+      'View state can persist using LocalStorage, \n\n Click "Try it!" refresh the page and try to reopen this tool tip!',
     buttonContent: "Try it!",
     side: "above",
     targetPos: 3,
-    animation: "grow",
+    animation: "shake",
     animationEntry: "pop-away",
   },
 ];
