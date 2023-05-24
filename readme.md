@@ -2,7 +2,7 @@
 
 ## Demo
 
-[Click Here (Desktop ideal)](https://vietnamesecoffee.github.io/projects/tippo)
+[Click Here (For Desktop)](https://vietnamesecoffee.github.io/projects/tippo)
 
 ## About
 
@@ -10,7 +10,7 @@ Tippo is a simple tool tip module written in TypeScript you can use to attach to
 
 It is highly customizable allowing you to adjust where it is relative to the target, and add color themes and animations to help engage users with the tool tip.
 
-Tippo is a direct child of the `body` element, and can auto adjust its position in the event of a screen resize event or DOM modifications.
+Tippo is a direct child of the `body` element, and can auto adjust its position on the x-axis in the event of a screen resize event or DOM modifications.
 
 All it requires is a `targetId` of a DOM element, its own `id` to represent itself, and string `content` and you can append/remove the tooltip with ease given its simple API.
 
@@ -60,3 +60,7 @@ tippo.append();
 tippo.remove();
 
 ```
+
+## TODO
+
+Update text box arrow tracking

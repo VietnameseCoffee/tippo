@@ -39,10 +39,10 @@ const introTip = new Tippo("chat-box-target", {
 const resetTip = new Tippo("btn-5-reset", {
   tippoId: "init-2",
   content:
-    "This button resets the local state for the tool tip on the left so it can render upon clicking again",
+    "This button resets the local state for the tool tip on the left so it can render upon clicking again, this tool tip does not persist!",
   color: "purple",
   side: "below",
-  noPersist: true,
+  noPersist: false,
   targetPos: 3,
   animation: "grow",
   animationEntry: "pop-away",
